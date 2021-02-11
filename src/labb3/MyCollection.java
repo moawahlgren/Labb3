@@ -11,4 +11,56 @@ package labb3;
  */
 public interface MyCollection {
     
+    
+    
+    abstract public boolean add(E e); 
+    //Ensures that this collection contains the specified element 
+        
+
+    abstract public boolean addAll(Collection<? extends E> c); 
+    //Adds all of the elements in the specified collection to this collection 
+        
+        
+    abstract public void clear(); 
+    //Removes all of the elements from this collection
+        
+    
+    abstract public boolean contains (Object o); 
+    //Returns true if this collection contains the specified element
+        
+
+    abstract public boolean containsAll(Colections <?> c); 
+    //Returns true if this collection contains all of the elments in te specfied collection
+        
+    
+    abstract public boolean equals(Object o);
+    //Compares the specified object with this collection for equality 
+        
+    
+    abstract public boolean isEmpty();  
+    //Returns true if this collection contains no elements
+        
+    
+    abstract public Iterator<E> iterator();
+    //Returns an iterator over the elements in this collection
+        
+
+    abstract public void remove(Object o); 
+    //Removes a single instance of the specified element from thi scollection, if present
+        
+
+    abstract public void removeAll(Collection <?> c); 
+    //Removes all of this collection's elements that are also contained in the specified collection
+        
+    
+    abstract public void retainAll(Collection <?> c);  
+    //Retains only the elements in this collecton that are contained in the specified collection 
+        
+  
+    abstract public int size();
+    //Returns the number of elements in this collection
+        
+    abstract public Object[] toArray();  
+    //Returns an array containing all of the elements in this collection
+    
 }
