@@ -5,19 +5,20 @@
  */
 package labb3;
 
+
 /**
  *
- * @author moawahlgren
+ * @author SaraRoempke & MoaWahlgren
+ * @param <E>
  */
-public interface MyCollection {
-    
-    
-    
+public interface MyCollection<E> extends java.lang.Iterable<E> { 
+   
+
     abstract public boolean add(E e); 
     //Ensures that this collection contains the specified element 
         
 
-    abstract public boolean addAll(Collection<? extends E> c); 
+    abstract public boolean addAll(MyCollection<? extends E> c); 
     //Adds all of the elements in the specified collection to this collection 
         
         
@@ -29,10 +30,11 @@ public interface MyCollection {
     //Returns true if this collection contains the specified element
         
 
-    abstract public boolean containsAll(Colections <?> c); 
+    abstract public boolean containsAll(MyCollection <?> c); 
     //Returns true if this collection contains all of the elments in te specfied collection
         
     
+    @Override
     abstract public boolean equals(Object o);
     //Compares the specified object with this collection for equality 
         
@@ -40,7 +42,7 @@ public interface MyCollection {
     abstract public boolean isEmpty();  
     //Returns true if this collection contains no elements
         
-    
+    @Override
     abstract public Iterator<E> iterator();
     //Returns an iterator over the elements in this collection
         
@@ -49,11 +51,11 @@ public interface MyCollection {
     //Removes a single instance of the specified element from thi scollection, if present
         
 
-    abstract public void removeAll(Collection <?> c); 
+    abstract public void removeAll(MyCollection <?> c); 
     //Removes all of this collection's elements that are also contained in the specified collection
         
     
-    abstract public void retainAll(Collection <?> c);  
+    abstract public void retainAll(MyCollection <?> c);  
     //Retains only the elements in this collecton that are contained in the specified collection 
         
   

@@ -7,45 +7,34 @@ package labb3;
 
 /**
  *
- * @author moawahlgren
+ * @author SaraRoempke & MoaWahlgren
+ * @param <E>
  */
-public class MyList<E> implements java.lang.Iterable<E> {
-   
-    private Node<E> head;
-    private Node<E> tail; 
-    private int size; 
+public interface MyList<E> extends MyCollection {
     
-    MyList() {
-        head = null; 
-        tail = null; 
-        size = 0; 
-    }
     
-    private static class Node<E> {
-        E element; 
-        Node<E> nextElement; 
+    abstract public void add(int index, E element);
+    //Appends the specified element to the end of this list
+
+    
+    abstract public boolean addAll(int index, MyCollection<? extends E> c); 
+    //Inserts all of the elements in the specified collection into this list att the specified position 
         
-        public Node(E element) {
-            this.element = element; 
-        }
-        public Node(E element, Node<E> nextElement) {
-            this.element = element; 
-            this.nextElement = nextElement; 
-        }
+    
+    abstract public E get(int index);  
+    //Returns the element at the specified position in this list
+    
+    
+    abstract public int indexOf(Object o); 
+    //Returns the index of the first occurence of the specifiked element in this list, or -1 if this list does not contain the element
         
-    }
-    
-    public int size() {
-        return size; 
-    }
-    
-    public void add(E element) {
-        tail = new Node(element, tail);
-        size ++; 
-    }
-    
-    
  
+    abstract public E set(int index, E element); 
+    //Replaces the element at the specified position in this list with the specified element 
+      
     
+    abstract public MyList<E> subList(int fromIndex, int toIndex); 
+    //Returns a view of the poirtion of this list between the specified fromIndex, inclusive, and toIndex, exclusive 
+        
     
 }

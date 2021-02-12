@@ -7,7 +7,7 @@ package labb3;
 
 /**
  *
- * @author moawahlgren
+ * @author SaraRoempke & MoaWahlgren
  */
 public class Main {
 
