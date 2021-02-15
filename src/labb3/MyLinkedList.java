@@ -286,9 +286,20 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     
     @Override 
     public String toString() {
+        StringBuilder string = new StringBuilder(" ");
         
-        
-        
+        Node<E> currentNode = head;
+        for(int i = 0; i<size; i++){
+            string.append(currentNode.element);
+            currentNode = currentNode.nextElement;
+            if(currentNode != null){
+                string.append(", ");
+            }
+            else{
+                string.append(" ");
+            }
+        }
+        return string.toString();
     }
     
     @Override 
