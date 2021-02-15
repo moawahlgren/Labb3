@@ -1,0 +1,100 @@
+package TestPackage;
+
+/**
+ *
+ * @author 
+ */
+import labb3.MyLinkedList;
+import labb3.MyCollection;
+import labb3.MyList;
+
+public class MyTestClass {
+
+    public static void main(String[] args) {
+        MyLinkedList<String> funkyStrings = new MyLinkedList<String>();
+        funkyStrings.add("Google");
+        funkyStrings.add("Motorola");
+        funkyStrings.add(1, "Android");
+        funkyStrings.add("Glasses");
+        funkyStrings.add("iPhone");
+        funkyStrings.remove(2);
+        funkyStrings.remove("iPhone");
+        funkyStrings.add("Nest");
+        funkyStrings.add(1, "Search");
+        System.out.println(funkyStrings.toString());
+        System.out.println("-----------------");
+        for (String str : funkyStrings) {
+            System.out.print(str + ":");
+        }
+        System.out.println();
+        System.out.println("-----------------");
+        MyLinkedList<String> fStr = funkyStrings;
+        System.out.println(fStr.toString());
+        System.out.println("-----------------");
+        MyLinkedList<String> strs = (MyLinkedList<String>) funkyStrings.clone();
+        funkyStrings.add("Cool stuff");
+        System.out.println(funkyStrings.toString());
+        System.out.println("-----------------");
+        System.out.println(fStr.toString());
+        System.out.println("-----------------");
+        System.out.println(strs.toString());
+        System.out.println("-----------------");
+        if (fStr.equals(funkyStrings)) {
+            System.out.println("Yes samma.");
+        }
+        else
+            System.out.println("Inte identiska.");
+        System.out.println("-----------------");
+        if (strs.equals(funkyStrings)) {
+            System.out.println("Yes samma.");
+        }
+        else
+            System.out.println("Inte identiska.");
+        System.out.println("-----------------");
+        MyCollection<String> colStr = fStr;
+        if (colStr.equals(funkyStrings)) {
+            System.out.println("Yes samma.");
+        }
+        else
+            System.out.println("Inte identiska.");
+        System.out.println("-----------------");
+        MyList<String> lStr = fStr;
+        if (lStr.equals(colStr)) {
+            System.out.println("Yes samma.");
+        }
+        else
+            System.out.println("Inte identiska.");
+        System.out.println("-----------------");
+        MyLinkedList<Integer> ints = new MyLinkedList<Integer>();
+        ints.add(1);
+        ints.add(3);
+        ints.add(1, 2);
+        ints.add(4);
+        ints.add(5);
+        ints.add(6);
+        Object[] intArray = ints.toArray();
+        for (int i = 0; i < intArray.length; i++) {
+            System.out.print(intArray[i] + ":");
+        }
+        System.out.println();
+        System.out.println("-----------------");
+        MyLinkedList<Integer> ints2 = new MyLinkedList<Integer>();
+        ints2.add(1);
+        ints2.add(2);
+        ints2.add(3);
+        ints.retainAll(ints2);
+        System.out.println(ints.toString());
+        System.out.println("-----------------");
+        ints2.remove(0);
+        ints2.remove(0);
+        ints2.add(42);
+        ints.removeAll(ints2);
+        System.out.println(ints.toString());
+        System.out.println("-----------------");
+    }
+}
+
+/*
+-------Output ur detta program borde vara[Google, Search, Android, Glasses, Nest]-----------------Google:Search:Android:Glasses:Nest:
+-----------------[Google, Search, Android, Glasses, Nest]-----------------[Google, Search, Android, Glasses, Nest, Cool stuff]-----------------[Google, Search, Android, Glasses, Nest, Cool stuff]-----------------[Google, Search, Android, Glasses, Nest]-----------------Yes samma.-----------------Inte identiska.-----------------Yes samma.-----------------Yes samma.-----------------1:2:3:4:5:6:-----------------[1, 2, 3]-----------------[1, 2]-----------------
+*/
