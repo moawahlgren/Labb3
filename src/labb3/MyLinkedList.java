@@ -5,11 +5,11 @@
  */
 package labb3;
 
+
 /**
  * 
  * @author SaraRoempke & MoaWahlgren
  * @param <E>
- *
  */
 public abstract class MyLinkedList<E> extends Object implements MyList {
    
@@ -77,8 +77,6 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     
 
     
-
-    
     //Nedan är metoder i MyCollection 
 
     @Override
@@ -92,36 +90,52 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
 
     @Override
     public boolean addAll(MyCollection<? extends E> c) {
-        //Adds all of the elements in the specified collection to this collection
+        int addedElements = 0; 
+        for(int i=0; i<c.size(); i++) {
+            
+        }
         return true; 
     }
 
     @Override
     public void clear() {
         //Removes all of the elements from this collection
-
-        
+        for(int i=0; i<size; i++) {
+            remove(i); 
+        } 
     }
 
     @Override
     public boolean contains(Object o) {
         //Returns true if this collection contains the specified element
         
-  
+        for (int i=0; i<size; i++) {
+            if (get(i) == o) {
+                return true;
+            }
+        }
+        return false; 
     }
 
     @Override
     public boolean containsAll(MyCollection<? extends E> c) {
-        //Returns true if this collection contains all of the elments in te specfied collection
-        return true; 
+        //Returns true if this collection contains all of the elments in the specfied collection
+        int foundElements = 0;  
+        
+        for(int i=0; i< c.size() ; i++) {
+            if (c.contains(i) == true) 
+                foundElements ++;    
+        }
+        if(foundElements == c.size()) {
+            return true; 
+        }
+        return false; 
     }
     
     @Override
     public boolean equals(Object o) {
         //Compares the specified object with this collection for equality 
-        
-        
-        return true; 
+        return (this == o); 
     }
 
     @Override
@@ -141,7 +155,7 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
 
     @Override
     public void remove(Object o) {
-        //Removes a single instance of the specified element from thi scollection, if present
+        //Removes a single instance of the specified element from this collection, if present
         boolean ready = false; 
         Node<E> current = tail; 
         while(!ready && current != null) {
@@ -157,7 +171,9 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     @Override
     public void removeAll(MyCollection <?> c) {
         //Removes all of this collection's elements that are also contained in the specified collection
-      
+        for(int i=0; i<c.size() ; i++) {
+            remove(i);
+        }
     }
 
     @Override
@@ -184,10 +200,10 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     //Nedan är metoder i MyList
     
     @Override
-    public void add(int index, E element) {
+    public void add(int index, E element) throws LinkedException {
         //Appends the specified element to the end of this list
         if(index > size) {
-            //error
+            throw new LinkedException("Index bigger than size");
         }
         else if(index == size) {
             add(element); 
@@ -206,7 +222,7 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     public boolean addAll(int index, MyCollection <? extends E> c) {
         //Inserts all of the elements in the specified collection into this list att the specified position 
         
-        return ; 
+        return true; 
 
     }
 
@@ -223,11 +239,13 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
 
     @Override
     public int indexOf(Object o) {
-        int indexOfObject = 0; 
         //Returns the index of the first occurence of the specifiked element in this list, or -1 if this list does not contain the element
-        
-        return indexOfObject; 
-
+        for (int i=0, i<size; i++) {
+            if(get(i) == o) {
+                return i; 
+            }
+        }
+        return -1; 
     }
 
     @Override
@@ -257,6 +275,3 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
         
     }
     
-    
-
-}
