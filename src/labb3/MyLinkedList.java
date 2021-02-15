@@ -5,19 +5,22 @@
  */
 package labb3;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * 
  * @author SaraRoempke & MoaWahlgren
  * @param <E>
  */
-public abstract class MyLinkedList<E> extends Object implements MyList {
+public class MyLinkedList<E> extends Object implements MyList<E> {
    
     private Node<E> head; 
     private Node<E> tail; 
     private int size; 
     
-    MyLinkedList() {
+    public MyLinkedList() {
         head = null; 
         tail = null; 
         size = 0; 
@@ -75,34 +78,57 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
         }
     }
     
-
+    public void addFirst(E e) {
+        Node<E> newNode = new Node<>(e); 
+        newNode.nextElement = head; 
+        head = newNode;
+    }
+    
+    public void addLast(E e) {
+        Node<E> newNode = new Node<>(e); 
+        
+        if (tail == null) {
+            head = tail = newNode; 
+        }
+        else { 
+            tail.nextElement = newNode; 
+            tail = newNode; 
+        }
+    }
     
     //Nedan är metoder i MyCollection 
 
     @Override
     public boolean add(E e) {
         //Ensures that this collection contains the specified element 
-        tail = new Node(e, tail); 
-        size ++;
-        
-        return true; 
+   
+        if (size == 0) {
+            addFirst(e); 
+        }
+        if (size > 0) {
+            addLast(e); 
+        }
+        size ++; 
+         
+        return contains(e); 
     }
+    
 
     @Override
-    public boolean addAll(MyCollection<? extends E> c) {
+    public boolean addAll(MyCollection c) {
+        //Adds all of the elements in the specified collection to this collection 
         int addedElements = 0; 
         for(int i=0; i<c.size(); i++) {
-            
+            add(get(i)); 
+            addedElements ++; 
         }
-        return true; 
+        return addedElements == c.size(); 
     }
 
     @Override
     public void clear() {
         //Removes all of the elements from this collection
-        for(int i=0; i<size; i++) {
-            remove(i); 
-        } 
+        head = tail = null; 
     }
 
     @Override
@@ -118,18 +144,15 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     }
 
     @Override
-    public boolean containsAll(MyCollection<? extends E> c) {
+    public boolean containsAll(MyCollection c) {
         //Returns true if this collection contains all of the elments in the specfied collection
         int foundElements = 0;  
         
-        for(int i=0; i< c.size() ; i++) {
+        for(int i=0; i<c.size(); i++) {
             if (c.contains(i) == true) 
                 foundElements ++;    
         }
-        if(foundElements == c.size()) {
-            return true; 
-        }
-        return false; 
+        return foundElements == c.size(); 
     }
     
     @Override
@@ -141,9 +164,7 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     @Override
     public boolean isEmpty() {
         //Returns true if this collection contains no elements
-  
-        
-        return true; 
+        return size == 0; 
     }
 
     @Override
@@ -156,20 +177,11 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     @Override
     public void remove(Object o) {
         //Removes a single instance of the specified element from this collection, if present
-        boolean ready = false; 
-        Node<E> current = tail; 
-        while(!ready && current != null) {
-            if(current.element.equals(o)) {
-                tail = current.nextElement; 
-                size--; 
-                ready = true; 
-            }
-            current = current.nextElement; 
-        }
+        
     }
 
     @Override
-    public void removeAll(MyCollection <?> c) {
+    public void removeAll(MyCollection c) {
         //Removes all of this collection's elements that are also contained in the specified collection
         for(int i=0; i<c.size() ; i++) {
             remove(i);
@@ -177,7 +189,7 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
     }
 
     @Override
-    public void retainAll(MyCollection <?> c) {
+    public void retainAll(MyCollection c) {
         //Retains only the elements in this collecton that are contained in the specified collection 
         
     }
@@ -215,15 +227,24 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
             Node<E> temp = current.nextElement; 
             current.nextElement = new Node(element, temp); 
             size++; 
+            
+            //FINNS ANNAN METOD MED HEAD, OM DENNA EJ FUNKAR
         }
     }
 
     @Override
-    public boolean addAll(int index, MyCollection <? extends E> c) {
-        //Inserts all of the elements in the specified collection into this list att the specified position 
-        
-        return true; 
-
+    public boolean addAll(int index, MyCollection c) {
+        //Inserts all of the elements in the specified collection into this list at the specified position 
+        int addedElements = 0;
+        for (int i=0; i<c.size(); i++) {
+            try { 
+                add(index, get(i));
+            } catch (LinkedException ex) {
+                Logger.getLogger(MyLinkedList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            addedElements ++; 
+        }
+        return addedElements == c.size();
     }
 
     @Override
@@ -239,8 +260,8 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
 
     @Override
     public int indexOf(Object o) {
-        //Returns the index of the first occurence of the specifiked element in this list, or -1 if this list does not contain the element
-        for (int i=0, i<size; i++) {
+        //Returns the index of the first occurence of the specified element in this list, or -1 if this list does not contain the element
+        for (int i=0; i<size; i++) {
             if(get(i) == o) {
                 return i; 
             }
@@ -256,22 +277,27 @@ public abstract class MyLinkedList<E> extends Object implements MyList {
 
     @Override
     public MyLinkedList<E> subList(int fromIndex, int toIndex) { 
-        //Returns a view of the poirtion of this list between the specified fromIndex, inclusive, and toIndex, exclusive 
+        //Returns a view of the portion of this list between the specified fromIndex, inclusive, and toIndex, exclusive 
 
     }
     
     
-    // Från Object
+    //Från Object
     
     @Override 
     public String toString() {
         
+        
+        
     }
     
     @Override 
-    public Object clone() {
+    public Object clone() throws CloneNotSupportedException {
         
         return; 
         
     }
     
+    
+
+}
