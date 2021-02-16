@@ -372,13 +372,15 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         return string.toString();
     }
     
-    @Override 
+     @Override 
     public Object clone() throws CloneNotSupportedException {
-        
-        return; 
-        
+        try{
+            return super.clone();
+        }
+        catch(CloneNotSupportedException b){
+            return null;
+        }
     }
-    
     
 
 }
