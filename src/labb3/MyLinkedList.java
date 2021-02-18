@@ -5,6 +5,7 @@
  */
 package labb3;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,20 +91,19 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
 
     public void addLast(E e) {
         Node<E> newNode = new Node<>(e); 
-        Node<E> last = head; 
-        if (last.next == null) {
+        Node<E> testNode = head; 
+        newNode.next = null; 
+        if (head == null) {
             head.next = newNode; 
-            newNode.previous = head; 
-            newNode.next = null; 
-            System.out.println(newNode.element);
+            newNode.previous = null;
+            head = newNode; 
         }
         else {
-            for (int i = 0; i<size; i++) {
-                last = last.next;
-                last.next = newNode;
-                newNode.previous = last; 
+            while (testNode.next != null) {
+                testNode = testNode.next;
             }
-            System.out.println(newNode.element); 
+            testNode.next = newNode; 
+            newNode.previous = testNode; 
         }
     }
 
@@ -114,7 +114,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         if (size == 0) {
             addFirst(e);
         }
-        if (size > 0) {
+        else {
             addLast(e);
         }
         size++;
@@ -122,14 +122,17 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     }
 
     @Override
-    public boolean addAll(MyCollection c) {
+    public boolean addAll(MyCollection<E> c) {
         //Adds all of the elements in the specified collection to this collection 
-        int addedElements = 0;
+        Object[] array; 
+        array = c.toArray(); 
+        MyLinkedList<E> list = new MyLinkedList<>(); 
+        Node<E> testNode = head; 
         for (int i = 0; i < c.size(); i++) {
-            add(get(i));
-            addedElements++;
+
         }
-        return addedElements == c.size();
+        
+        return true;
     }
 
     @Override
@@ -151,16 +154,16 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     }
 
     @Override
-    public boolean containsAll(MyCollection c) {
+    public boolean containsAll(MyCollection<E> c) {
         //Returns true if this collection contains all of the elments in the specfied collection
-        int foundElements = 0;
-
-        for (int i = 0; i < c.size(); i++) {
-            if (c.contains(i) == true) {
-                foundElements++;
+        Object[] array;
+        array = c.toArray();
+        for (int i = 0; i<c.size(); i++) {
+            if (contains(array[i]) == false) {
+                return false; 
             }
         }
-        return foundElements == c.size();
+        return true; 
     }
 
     @Override
@@ -197,8 +200,6 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         for (int i = 0; i < size - 2; i++) {
             current = current.next;
         }
-
-        Node<E> temp = tail;
         tail = current;
         tail.next = null;
         size --;
@@ -206,8 +207,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     }
     
     @Override
-    public boolean remove(Object o) {
-        System.out.println(indexOf(o)); 
+    public boolean remove(Object o) { 
         if (contains(o) == false) {
             return false; 
         }
@@ -220,15 +220,12 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         if (indexOf(o) == size -1) {
             return removeLast(); 
         }
-        
-        System.out.println("Hej");
         Node<E> testNode = head;
         for (int i=0; i < indexOf(o); i++) {
             testNode = testNode.next; 
         }
         testNode.previous.next = testNode.next; 
         testNode.next.previous = testNode.previous;
-        System.out.println(" Removing:" + testNode.element + "Same as??" + o); 
         size --; 
         
         return contains(o) == false; 
@@ -243,25 +240,33 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         if (index == size-1) {
             return removeLast();
         }
-        else {
-            Node<E> current = head; 
-            for (int i = 0; i < index; i++) {
-                current = current.next; 
-            }
-            return remove(current); 
+        if (index >= size) {
+            return false; 
         }
+        Node<E> testNode = head; 
+        for (int i=0; i<index; i++) {
+            testNode = testNode.next; 
+        }
+        testNode.previous.next = testNode.next; 
+        testNode.next.previous = testNode.previous; 
+        size--; 
+        return contains(get(index)) == false; 
     }
 
     @Override
     public boolean removeAll(MyCollection c) {
         //Removes all of this collection's elements that are also contained in the specified collection
-        int removedElements = 0;
-        for (int i = 0; i < c.size(); i++) {
-            if (remove(i) == true) {
-                removedElements++;
+        int removedElements = 0; 
+        Object[] array;
+        array = c.toArray();
+        System.out.println("Printar arrray som ska raderas. " + Arrays.toString(c.toArray()));
+        for (int i = 0; i<c.size(); i++) {
+            if (contains(array[i])) {
+                remove(array[i]);
+                removedElements ++; 
             }
         }
-        return removedElements == c.size();
+        return removedElements == c.size(); 
     }
 
     @Override
@@ -355,7 +360,6 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
                     return i;
                 }
             }
-        
 
         return -1;
     }
