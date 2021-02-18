@@ -92,8 +92,9 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         Node<E> newNode = new Node<>(e); 
         Node<E> last = head; 
         if (last.next == null) {
-            last.next = newNode; 
+            head.next = newNode; 
             newNode.previous = head; 
+            newNode.next = null; 
             System.out.println(newNode.element);
         }
         else {
@@ -101,8 +102,8 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
                 last = last.next;
                 last.next = newNode;
                 newNode.previous = last; 
-                System.out.println(newNode.element); 
             }
+            System.out.println(newNode.element); 
         }
     }
 
@@ -141,7 +142,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     @Override
     public boolean contains(Object o) {
         //Returns true if this collection contains the specified element
-        for (int i = 0; i < this.size; i++) {
+        for (int i = 0; i < size; i++) {
             if (get(i) == o) {
                 return true;
             }
@@ -178,12 +179,10 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         if (size == 0) {
             return false;
         }
-        Node<E> temp = head;
         head = head.next;
-        size--;
-        if (isEmpty() == true) {
-            clear();
-        }
+        head.previous = null; 
+
+        size --;
         return true;
     }
 
@@ -202,34 +201,55 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         Node<E> temp = tail;
         tail = current;
         tail.next = null;
-        size--;
-
+        size --;
         return true;
     }
-
+    
     @Override
     public boolean remove(Object o) {
-        //Removes a single instance of the specified element from this collection, if present
+        System.out.println(indexOf(o)); 
         if (contains(o) == false) {
+            return false; 
+        }
+        if (indexOf(o) < 0 || indexOf(o) >= size) {
             return false;
         }
-
-        if (indexOf(o) < 0 || indexOf(o) <= size) {
-            return false;
-        } else if (indexOf(o) == 0) {
-            return removeFirst();
-        } else if (indexOf(o) == size - 1) {
+        if (indexOf(o) == 0) {
+            return removeFirst(); 
+        }
+        if (indexOf(o) == size -1) {
+            return removeLast(); 
+        }
+        
+        System.out.println("Hej");
+        Node<E> testNode = head;
+        for (int i=0; i < indexOf(o); i++) {
+            testNode = testNode.next; 
+        }
+        testNode.previous.next = testNode.next; 
+        testNode.next.previous = testNode.previous;
+        System.out.println(" Removing:" + testNode.element + "Same as??" + o); 
+        size --; 
+        
+        return contains(o) == false; 
+    }
+    
+   
+    public boolean remove(int index) {
+        //Removes a single instance of the specified element from this collection, if present
+        if (index == 0) {
+            return removeFirst(); 
+        }
+        if (index == size-1) {
             return removeLast();
-        } else {
-            
-            MyIterator<E> it = (MyIterator<E>) iterator(); 
-            while (it.hasNext() == true) {
-                if (it.equals(o)) {
-                        it.remove();
-                }
-            }
         }
-        return true;
+        else {
+            Node<E> current = head; 
+            for (int i = 0; i < index; i++) {
+                current = current.next; 
+            }
+            return remove(current); 
+        }
     }
 
     @Override
@@ -249,7 +269,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         //Retains only the elements in this collecton that are contained in the specified collection 
         for (int i = 0; i < size; i++) {
             if (c.contains(get(i)) == false) {
-                this.remove(get(i));
+                this.remove(i);
             }
         }
     }
@@ -282,15 +302,14 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
             
             Node<E> newNode = new Node<>(element); 
             Node <E> previous = head; 
-            for (int i = size - 1; i > index+2; i--) {
+            for (int i = 0; i > index-1; i++) {
                 previous = previous.next; 
             }
             newNode.next = previous.next; 
             previous.next = newNode; 
             newNode.previous = previous; 
+            System.out.println(newNode.element);
             size++;
-
-            //FINNS ANNAN METOD MED HEAD, OM DENNA EJ FUNKAR
         }
     }
 
@@ -321,7 +340,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         }
         
         Node<E> current = head;
-        for (int i = 0; i < index-1; i++) {
+        for (int i = 0; i < index; i++) {
             current = current.next;
         }
         return current.element;
@@ -330,13 +349,13 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     @Override
     public int indexOf(Object o) {
         //Returns the index of the first occurence of the specified element in this list, or -1 if this list does not contain the element
-        if (contains(o) == true) {
+        
             for (int i = 0; i < size; i++) {
                 if (get(i) == o) {
                     return i;
                 }
             }
-        }
+        
 
         return -1;
     }
