@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author SaraRoempke & MoaWahlgren
  * @param <E>
  */
-public class MyLinkedList<E> extends Object implements MyList<E> {
+public class MyLinkedList<E> extends Object implements MyList<E>, Cloneable {
 
     private Node<E> head;
     private Node<E> tail; 
@@ -96,9 +96,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
             }
             head = newNode; 
             size ++;
-        }
-        
-        
+        }        
     }
 
     private void addLast(E e) {
@@ -136,15 +134,13 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     @Override
     public boolean addAll(MyCollection<E> c) {
         //Adds all of the elements in the specified collection to this collection 
-        Object[] array; 
-        array = c.toArray(); 
-        MyLinkedList<E> list = new MyLinkedList<>(); 
-        Node<E> testNode = head; 
-        for (int i = 0; i < c.size(); i++) {
-
+        MyIterator<E> iteratorTest = (MyIterator<E>) c.iterator(); 
+ 
+        for(int i = 0; i<c.size(); i++){
+                add(iteratorTest.next());
         }
-        
-        return true;
+        return containsAll(c); 
+
     }
 
     @Override
@@ -158,7 +154,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     public boolean contains(Object o) {
         //Returns true if this collection contains the specified element
         for (int i = 0; i < size; i++) {
-            if (get(i) == o) {
+            if (o.equals(get(i))) {
                 return true;
             }
         }
@@ -240,7 +236,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         testNode.next.previous = testNode.previous;
         size --; 
         
-        return contains(o) == false; 
+        return contains(o) != true;
     }
     
    
@@ -261,7 +257,6 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         }
         testNode.previous.next = testNode.next; 
         testNode.next.previous = testNode.previous; 
-        System.out.println("Tar bort" + testNode.element);
         size--; 
         
         return true;
@@ -273,7 +268,6 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         int removedElements = 0; 
         Object[] array;
         array = c.toArray();
-        System.out.println("Printar arrray som ska raderas. " + Arrays.toString(c.toArray()));
         for (int i = 0; i<c.size(); i++) {
             if (contains(array[i])) {
                 remove(array[i]);
@@ -321,30 +315,35 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         }
         if (index == 0) {
             addFirst(element); 
-        } else {
+        } 
+        else { 
+
+            Node<E> testNode = head; 
+            int i = 1; 
+            while (i < index) {
+            i++; 
+            testNode = testNode.next; 
+            }
             
             Node<E> newNode = new Node<>(element); 
-            Node <E> previous = head; 
-            for (int i = 0; i < index-1; i++) {
-                previous = previous.next; 
-            }
-            newNode.next = previous.next; 
-            previous.next = newNode; 
-            newNode.previous = previous; 
- 
+            newNode.next = testNode.next; 
+            testNode.next.previous = newNode; 
+            testNode.next = newNode; 
+
             size++;
         }
     }
+    
 
     @Override
     public boolean addAll(int index, MyCollection<E> c) {
         //Inserts all of the elements in the specified collection into this list at the specified position 
-        // Vi vill kunna använda add? Objekt behöver bli element..
         MyIterator<E> iteratorTest = (MyIterator<E>) c.iterator(); 
  
         for(int i = 0; i<c.size(); i++){
             try {
                 add(index, iteratorTest.next());
+                index ++;
             } catch (LinkedException ex) {
                 Logger.getLogger(MyLinkedList.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -379,7 +378,6 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
                     return i;
                 }
             }
-
         return -1;
     }
 
