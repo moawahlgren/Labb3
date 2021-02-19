@@ -45,7 +45,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
 
     @Override
     public java.util.Iterator<E> iterator() {
-        return new MyIterator(tail);
+        return new MyIterator(head);
     }
 
     private class MyIterator<E> implements java.util.Iterator<E> {
@@ -81,15 +81,27 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         }
     }
 
-    public void addFirst(E e) {
-        Node<E> newNode = new Node<>(e);
-        newNode.previous = null;
-        head = newNode;
-        System.out.println(newNode.element); 
+    private void addFirst(E e) {
+        if (size == 0) {
+            Node<E> newNode = new Node<>(e);
+            newNode.previous = null;
+            head = newNode;            
+        }
+        else {
+            Node<E> newNode = new Node<>(e); 
+            newNode.next = head; 
+            newNode.previous = null;
+            if (head != null) {
+                head.previous = newNode; 
+            }
+            head = newNode; 
+            size ++;
+        }
+        
         
     }
 
-    public void addLast(E e) {
+    private void addLast(E e) {
         Node<E> newNode = new Node<>(e); 
         Node<E> testNode = head; 
         newNode.next = null; 
@@ -175,7 +187,7 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     @Override
     public boolean isEmpty() {
         //Returns true if this collection contains no elements
-        return size == 0;
+        return head == null; 
     }
 
     private boolean removeFirst() {
@@ -249,8 +261,10 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         }
         testNode.previous.next = testNode.next; 
         testNode.next.previous = testNode.previous; 
+        System.out.println("Tar bort" + testNode.element);
         size--; 
-        return contains(get(index)) == false; 
+        
+        return true;
     }
 
     @Override
@@ -301,36 +315,41 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
         //Appends the specified element to the end of this list
         if (index > size) {
             throw new LinkedException("Index bigger than size");
-        } else if (index == size) {
+        } 
+        if (index == size) {
             add(element);
+        }
+        if (index == 0) {
+            addFirst(element); 
         } else {
             
             Node<E> newNode = new Node<>(element); 
             Node <E> previous = head; 
-            for (int i = 0; i > index-1; i++) {
+            for (int i = 0; i < index-1; i++) {
                 previous = previous.next; 
             }
             newNode.next = previous.next; 
             previous.next = newNode; 
             newNode.previous = previous; 
-            System.out.println(newNode.element);
+ 
             size++;
         }
     }
 
     @Override
-    public boolean addAll(int index, MyCollection c) {
+    public boolean addAll(int index, MyCollection<E> c) {
         //Inserts all of the elements in the specified collection into this list at the specified position 
-        int addedElements = 0;
-        for (int i = 0; i < c.size(); i++) {
+        // Vi vill kunna använda add? Objekt behöver bli element..
+        MyIterator<E> iteratorTest = (MyIterator<E>) c.iterator(); 
+ 
+        for(int i = 0; i<c.size(); i++){
             try {
-                add(index, get(i));
+                add(index, iteratorTest.next());
             } catch (LinkedException ex) {
                 Logger.getLogger(MyLinkedList.class.getName()).log(Level.SEVERE, null, ex);
             }
-            addedElements++;
         }
-        return addedElements == c.size();
+        return containsAll(c); 
     }
 
     @Override
@@ -394,11 +413,14 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
 
         Node<E> currentNode = head;
         for (int i = 0; i < size; i++) {
-            string.append(currentNode.element);
-            currentNode = currentNode.next;
             if (currentNode != null) {
+                string.append(currentNode.element);
+                currentNode = currentNode.next;
+            } 
+            if(currentNode != null) {
                 string.append(", ");
-            } else {
+            }
+            if (currentNode == null) {
                 string.append(" ");
             }
         }
@@ -416,3 +438,4 @@ public class MyLinkedList<E> extends Object implements MyList<E> {
     }
 
 }
+
